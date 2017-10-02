@@ -1,0 +1,2 @@
+semver==2.7.9
+gitchangelog==3.0.3
