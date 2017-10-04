@@ -267,7 +267,6 @@ def parse_changelog(raw_log, config=None):
                         message = parsed_entry.rsplit(':', 1)[1].rsplit('[', 1)[0].replace('- ', '').strip()
                     else:
                         message = parsed_entry.rsplit('[', 1)[0].replace('- ', '').strip()
-                    author = parsed_entry.rsplit('[', 1)[1].replace(']', '')
                     if '#' in message:
                         _message = ''
                         __msg = message.split(' ')
