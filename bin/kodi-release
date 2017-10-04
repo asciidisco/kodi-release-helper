@@ -332,24 +332,25 @@ def generate_markdown_changelog(parsed_log, config=None):
         for _type in _entry.get('entries', {}):
             md += '- **' + _type + ':**' + '\n'
             for scope in _entry.get('entries', {}).get(_type, {}):
-                md += '  - *' + scope + ':*' + '\n'
-                for entry in _entry.get('entries', {}).get(_type, {}).get(scope, []):
-                    _line_msg = '   - ' + entry.get('msg')
-                    _line_list = _line_msg.split(' ')
-                    _curr_line = ''
-                    _line_char_count = 0
-                    for _line_part in _line_list:
-                        _next_line_char_count = _line_char_count + len(_line_part) + len('     ')
-                        if _next_line_char_count > 79:
-                            _line_char_count = len(_line_part) + len('     ')
-                            _curr_line += '\n      ' + _line_part.strip()
-                        else:
-                            _curr_line += ' ' + _line_part
-                            _line_char_count = _next_line_char_count
-                    line_msg = _curr_line
-                    line_author = '[[' + entry.get('author') + '](' +  entry.get('author_url') + ')]'
-                    line = line_msg + '\n      ' + line_author + '\n'
-                    md += line
+                if ' ' not in scope:
+                  md += '  - *' + scope + ':*' + '\n'
+                  for entry in _entry.get('entries', {}).get(_type, {}).get(scope, []):
+                      _line_msg = '   - ' + entry.get('msg')
+                      _line_list = _line_msg.split(' ')
+                      _curr_line = ''
+                      _line_char_count = 0
+                      for _line_part in _line_list:
+                          _next_line_char_count = _line_char_count + len(_line_part) + len('     ')
+                          if _next_line_char_count > 79:
+                              _line_char_count = len(_line_part) + len('     ')
+                              _curr_line += '\n      ' + _line_part.strip()
+                          else:
+                              _curr_line += ' ' + _line_part
+                              _line_char_count = _next_line_char_count
+                      line_msg = _curr_line
+                      line_author = '[[' + entry.get('author') + '](' +  entry.get('author_url') + ')]'
+                      line = line_msg + '\n      ' + line_author + '\n'
+                      md += line
     return md.rstrip('\n')
 
 def changelog(config=None):
@@ -402,17 +403,18 @@ def last_changes(config=None):
             for entry in ver_log.get('entries', {}).get(_type, {}).get(scope, []):
                 _msg = ''
                 msg = entry.get('msg')
-                if '[#' in msg:
-                    for idx, part in enumerate(msg.split('[#')):
-                        if idx == 0:
-                          last_line = part
-                        if idx == 1:
-                            issue_no = part.split(']')[0]
-                            post_link = part.rsplit(')')[1]
-                    _msg = last_line + '#' + issue_no + post_link
-                else:
-                    _msg = msg
-                logs += '\n' + '- ' + _msg
+                if msg.strip() != '':
+                    if '[#' in msg:
+                        for idx, part in enumerate(msg.split('[#')):
+                            if idx == 0:
+                              last_line = part
+                            if idx == 1:
+                                issue_no = part.split(']')[0]
+                                post_link = part.rsplit(')')[1]
+                        _msg = last_line + '#' + issue_no + post_link
+                    else:
+                        _msg = msg
+                    logs += '\n' + '- ' + _msg
     return logs
 
 def main():

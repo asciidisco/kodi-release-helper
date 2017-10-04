@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='kodi-release-helper',
-    version='1.0.1',
+    version='1.0.2',
     description='Kodi Release Helper',
     author='asciidisco',
     author_email='public@asciidisco.com',
