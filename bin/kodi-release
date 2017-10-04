@@ -292,9 +292,12 @@ def parse_changelog(raw_log, config=None):
                     if scope not in parsed_entries.get('type', {}).keys():
                         parsed_entries[_type][scope] = []
 
-                    author = parsed_entry.rsplit('[', 1)[1].replace(']', '')
-                    for rep in replacer:
-                        author = author.replace(rep[0], rep[1])
+                    try:
+                        author = parsed_entry.rsplit('[', 1)[1].replace(']', '')
+                        for rep in replacer:
+                            author = author.replace(rep[0], rep[1])
+                    except:
+                        author = get_addon_data().get('author', '')
 
                     parsed_entries[_type][scope].append({
                         'raw': parsed_entry,
